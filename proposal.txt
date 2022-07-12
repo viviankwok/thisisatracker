@@ -1,0 +1,22 @@
+USER STORIES
+1. database that stores a list of recipes for users to filter based on fixed fields
+    - include set of initial data 
+2. calorie tracker computes the total amount of calories based on the user's selected recipes
+    - can be done via setting arrays / useState => retrieve calorie count data and sum
+
+API CALL FUNCTIONS <- db: recipes
+1. view all recipes (GET)
+2. view filtered recipies (GET)
+3. add/create (POST)
+4. edit (PUT)
+5. delete (DELETE)
+
+(stretch?)
+6. view random recipe (GET)
+
+LOGIN AUTH 
+(stretch?) 
+1. Different user profiles <- db: users
+2. Use JWT token for auth (instead of sessions as this has difficulty passing data from BE to FE/React)
+    - backend has a different server from frontend; 
+    - cookie cannot be passed (?) across servers => info doesnt get relayed 
