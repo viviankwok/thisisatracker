@@ -119,18 +119,40 @@ router.get("/users", auth, async (req, res) => {
     res.json(user);
   } catch (error) {
     console.log("GET /users", error);
-    res.status(403).json({ status: "error", message: "an error has occurred" });
+    res.status(403).json({ status: "error", message: "An error has occurred" });
   }
 });
 
-router.get("/logout", async (req, res) => {
-  console.log("User Id", req.user._id);
-  await User.findByIdAndRemove(req.user._id, (err, data) => {
-    if (err) {
-      res.send(err);
-    }
-    res.json({ message: "User Logged Out" });
-  });
+// router.get("/logout", async (req, res) => {
+//   console.log("User Id", req.user._id);
+//   await User.findByIdAndRemove(req.user._id, (err, data) => {
+//     if (err) {
+//       res.send(err);
+//     }
+//     res.json({ message: "User Logged Out" });
+//   });
+// });
+
+// More of a delete route instead of logout
+// router.get("/logout", async (req, res) => {
+//   try {
+//     const user = await User.findByIdAndRemove(req.body._id);
+//     res.json(user);
+//   } catch (error) {
+//     console.log("GET /users", error);
+//     res.status(400).json({ status: "error", message: "An error has occurred" });
+//   }
+// });
+
+// pending test for this when auth works
+router.get("/logout", auth, async (req, res) => {
+  try {
+    const user = await User.findByIdAndRemove(req.decoded.id);
+    res.json(user);
+  } catch (error) {
+    console.log("GET /users", error);
+    res.status(400).json({ status: "error", message: "An error has occurred" });
+  }
 });
 
 module.exports = router;
