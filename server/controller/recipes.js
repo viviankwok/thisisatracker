@@ -19,7 +19,7 @@ router.get("/testing", async (req, res) => {
   }
 });
 
-// filter, edit, delete
+// viv - filter, edit, delete
 
 // GET (=> filter)
 router.post("/recipe", async (req, res) => {
@@ -39,15 +39,35 @@ router.post("/recipe", async (req, res) => {
 router.post("/seed", async (req, res) => {
   try {
     Recipe.collection.drop();
-    const initRecipe = {
-      name: "avocado sandwhich",
-      meat: "impossible meat",
-      veg: ["lettuce", "cucumber", "tomatoes"],
-      calories: 450,
-      instructions: "Take avocado and sandwhich it.",
-      prepTime: 5,
-      tags: ["healthy", "delicious", "easy", "avocado", "lovely", "hahaha"],
-    };
+    const initRecipe = [
+      {
+        name: "avocado sandwhich",
+        meat: ["impossible meat"],
+        veg: ["lettuce", "cucumber", "tomatoes"],
+        calories: 450,
+        instructions: "Take avocado and sandwhich it.",
+        prepTime: 5,
+        tags: ["healthy", "delicious", "easy", "avocado", "lovely", "hahaha"],
+      },
+      {
+        name: "banana sandwhich",
+        meat: ["chicken"],
+        veg: ["lettuce", "olives", "cabbage"],
+        calories: 450,
+        instructions: "Take banana and sandwhich it.",
+        prepTime: 5,
+        tags: ["healthy", "yellow outside", "white inside", "peel", "hahaha"],
+      },
+      {
+        name: "coconut paprika chicken",
+        meat: ["chicken"],
+        veg: ["baby spinach"],
+        calories: 450,
+        instructions: "Add coconut and paprika to chicken",
+        prepTime: 25,
+        tags: ["healthy", "orange", "beautiful", "tasty", "coconut"],
+      },
+    ];
 
     await Recipe.create(initRecipe);
     res.status(200).json({ status: "ok!", message: "seeding completed." });
@@ -113,19 +133,27 @@ router.delete("/delete", async (req, res) => {
 });
 
 // // FILTER
-// router.post("/recipe", async (req, res) => {
-//   try {
-//     const recipe = await Recipe.find({ _id: req.body.id}, {tags: {$or: {req.body.input}}} );
-//     res.send(recipe);
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(401).json({
-//       status: "error",
-//       message: "An error occured.",
-//     });
-//   }
-// });
+router.post("/filter", async (req, res) => {
+  try {
+    // search criteria: any tags AND any meatTags AND any vegTags
+    // does not work if any of the req.body.tags/meatTags/vegTags are empty
+    const recipes = await Recipe.find({
+      tags: { $elemMatch: { $in: req.body.tags } },
+      meat: { $elemMatch: { $in: req.body.meatTags } },
+      veg: { $elemMatch: { $in: req.body.vegTags } },
+    });
+    console.log(`req.body.tags: ${req.body.tags}`);
+    console.log(`req.body.meatTags: ${req.body.meatTags}`);
+    console.log(`req.body.vegTags: ${req.body.vegTags}`);
 
-// router.find();
+    res.json(recipes);
+  } catch (error) {
+    console.log(error);
+    return res.status(401).json({
+      status: "error",
+      message: "An error occured.",
+    });
+  }
+});
 
 module.exports = router;
