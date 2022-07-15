@@ -5,11 +5,19 @@ USER STORIES
     - can be done via setting arrays / useState => retrieve calorie count data and sum
 
 API CALL FUNCTIONS <- db: recipes
-1. view all recipes (GET)
-2. view filtered recipies (GET)
-3. add/create (POST)
-4. edit (PUT)
-5. delete (DELETE)
+
+[public, no auth]
+0. login page - ben
+- access and refresh token
+
+[all users]
+1. view all recipes (GET) - xm 
+2. view filtered recipes (GET) - viv
+3. add/create (POST) - xm 
+
+[admin only]
+4. edit (PUT) - viv
+5. delete (DELETE) recipes - viv
 
 (stretch?)
 6. view random recipe (GET)

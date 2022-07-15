@@ -15,7 +15,10 @@ const recipesData = {
   // number in minutes
   preparationTime: 20,
   flavourProfile: ["spicy", "sweet", "savory", "unami"],
+  tags: ["dairy", "vegan", "keto", "healthy", "delicious"],
 };
+// const results = Recipe.find({tags: "healthy"}, {calories: $gt 500})
+// res.send(results)
 
 // db: thisisatracker / collection: users
 const mongoose = require("mongoose");
