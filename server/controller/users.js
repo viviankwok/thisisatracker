@@ -8,6 +8,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const User = require("../models/User");
 const auth = require("../middleware/auth");
+const { check, validationResult } = require("express-validator");
 
 router.get("/testing", async (req, res) => {
   try {
@@ -18,73 +19,99 @@ router.get("/testing", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
-  try {
-    // find if user exists
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) {
-      return res
-        .status(400)
-        .json({ status: "error", message: "User not found" });
-    } else {
-      // user exists, compare hash with password input
-      const result = await bcrypt.compare(req.body.password, user.hash);
-      if (!result) {
-        console.log("username or password error");
+router.post(
+  "/login",
+  [
+    check("email", "Please enter a valid email").isEmail(),
+    check("password", "Please enter a valid password.").isLength({ min: 12 }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      // find if user exists
+      const user = await User.findOne({ email: req.body.email });
+      if (!user) {
         return res
-          .status(401)
-          .json({ status: "error", message: "Password does not match" });
+          .status(400)
+          .json({ status: "error", message: "User not found" });
+      } else {
+        // user exists, compare hash with password input
+        const result = await bcrypt.compare(req.body.password, user.hash);
+        if (!result) {
+          console.log("username or password error");
+          return res
+            .status(401)
+            .json({ status: "error", message: "Password does not match" });
+        }
+
+        const payload = {
+          id: user._id,
+          email: user.email,
+          isAdmin: user.isAdmin,
+        };
+
+        const access = jwt.sign(payload, process.env.ACCESS_SECRET, {
+          expiresIn: "20m",
+          jwtid: uuidv4(),
+        });
+
+        const refresh = jwt.sign(payload, process.env.REFRESH_SECRET, {
+          expiresIn: "30d",
+          jwtid: uuidv4(),
+        });
+
+        const response = { access, refresh };
+        res.json(response);
       }
-
-      const payload = {
-        id: user._id,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      };
-
-      const access = jwt.sign(payload, process.env.ACCESS_SECRET, {
-        expiresIn: "20m",
-        jwtid: uuidv4(),
-      });
-
-      const refresh = jwt.sign(payload, process.env.REFRESH_SECRET, {
-        expiresIn: "30d",
-        jwtid: uuidv4(),
-      });
-
-      const response = { access, refresh };
-      res.json(response);
+    } catch (error) {
+      console.log("POST /users/login" + error);
+      res.status(400).json({ status: "error", message: "Login failed" });
     }
-  } catch (error) {
-    console.log("POST /users/login" + error);
-    res.status(400).json({ status: "error", message: "Login failed" });
   }
-});
+);
 
-router.post("/create", async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.body.email });
-
-    if (user || req.body.password !== req.body.password1) {
-      return res.status(400).json({
-        status: "error",
-        message: "Duplicate username or passwords do not match",
-      });
+router.post(
+  "/create",
+  [
+    check("email", "Please enter valid email").isEmail(),
+    check("password", "Please enter valid password").isLength({ min: 12 }),
+    check("password1", "Please enter valid password1").isLength({ min: 12 }),
+    check("name", "Name is required").not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ Status: "error", error: errors.array() });
     }
-    const hash = await bcrypt.hash(req.body.password, 12);
-    const createdUser = await User.create({
-      email: req.body.email,
-      hash,
-      name: req.body.name,
-      isAdmin: req.body.isAdmin,
-    });
-    console.log("create user: ", createdUser);
-    res.json({ status: "ok", message: "user created" });
-  } catch (error) {
-    console.log("POST /create", error);
-    res.status(400).json({ status: "error", message: "An error has occured" });
+    try {
+      const user = await User.findOne({ email: req.body.email });
+
+      if (user || req.body.password !== req.body.password1) {
+        return res.status(400).json({
+          status: "error",
+          message: "Duplicate username or passwords do not match",
+        });
+      }
+      const hash = await bcrypt.hash(req.body.password, 12);
+      const createdUser = await User.create({
+        email: req.body.email,
+        hash,
+        name: req.body.name,
+        isAdmin: req.body.isAdmin,
+      });
+      console.log("create user: ", createdUser);
+      res.json({ status: "ok", message: "user created" });
+    } catch (error) {
+      console.log("POST /create", error);
+      res
+        .status(400)
+        .json({ status: "error", message: "An error has occured" });
+    }
   }
-});
+);
 
 router.get("/users", auth, async (req, res) => {
   try {
@@ -96,7 +123,7 @@ router.get("/users", auth, async (req, res) => {
   }
 });
 
-router.get("/logout", auth, async (req, res) => {
+router.get("/logout", async (req, res) => {
   console.log("User Id", req.user._id);
   await User.findByIdAndRemove(req.user._id, (err, data) => {
     if (err) {
