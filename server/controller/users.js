@@ -28,7 +28,7 @@ router.post("/login", async (req, res) => {
         .json({ status: "error", message: "User not found" });
     } else {
       // user exists, compare hash with password input
-      const result = await bcrypt.compare(user.hash, req.body.password);
+      const result = await bcrypt.compare(req.body.password, user.hash);
       if (!result) {
         console.log("username or password error");
         return res
@@ -52,12 +52,58 @@ router.post("/login", async (req, res) => {
         jwtid: uuidv4(),
       });
 
-      const response = (access, refresh);
+      const response = { access, refresh };
       res.json(response);
     }
   } catch (error) {
-    console.log("POST /login" + error);
+    console.log("POST /users/login" + error);
     res.status(400).json({ status: "error", message: "Login failed" });
   }
 });
+
+router.post("/create", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (user || req.body.password !== req.body.password1) {
+      return res.status(400).json({
+        status: "error",
+        message: "Duplicate username or passwords do not match",
+      });
+    }
+    const hash = await bcrypt.hash(req.body.password, 12);
+    const createdUser = await User.create({
+      email: req.body.email,
+      hash,
+      name: req.body.name,
+      isAdmin: req.body.isAdmin,
+    });
+    console.log("create user: ", createdUser);
+    res.json({ status: "ok", message: "user created" });
+  } catch (error) {
+    console.log("POST /create", error);
+    res.status(400).json({ status: "error", message: "An error has occured" });
+  }
+});
+
+router.get("/users", auth, async (req, res) => {
+  try {
+    const user = await User.find();
+    res.json(user);
+  } catch (error) {
+    console.log("GET /users", error);
+    res.status(403).json({ status: "error", message: "an error has occurred" });
+  }
+});
+
+router.get("/logout", auth, async (req, res) => {
+  console.log("User Id", req.user._id);
+  await User.findByIdAndRemove(req.user._id, (err, data) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: "User Logged Out" });
+  });
+});
+
 module.exports = router;
