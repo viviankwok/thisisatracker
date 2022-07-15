@@ -10,28 +10,13 @@ const Recipe = require("../models/Recipe");
 const auth = require("../middleware/auth");
 const User = require("../models/User");
 
+// TESTING
 router.get("/testing", async (req, res) => {
   try {
     res.send("yes it works");
   } catch (error) {
     console.log(error);
     res.send("got error ");
-  }
-});
-
-// viv - filter, edit, delete
-
-// GET (=> filter)
-router.post("/recipe", async (req, res) => {
-  try {
-    const recipe = await Recipe.find({ _id: req.body.id });
-    res.send(recipe);
-  } catch (error) {
-    console.log(error);
-    return res.status(401).json({
-      status: "error",
-      message: "An error occured.",
-    });
   }
 });
 
