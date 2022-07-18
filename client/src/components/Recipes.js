@@ -8,8 +8,35 @@ const Recipes = () => {
   const [tagsInput, setTagsInput] = useState("");
   const [caloriesInput, setCaloriesInput] = useState("");
   const [prepTimeInput, setPrepTimeInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [recipeData, setRecipeData] = useState("");
 
-  const handleSearchSubmit = () => {};
+  const fetchRecipes = async (url) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(url);
+      if (res.status !== 200) {
+        throw new Error(
+          "Something went wrong. Please check if all inputs fields are clicked"
+        );
+      }
+
+      const data = await res.json();
+      setRecipeData(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+
+    const url = "http://localhost:5001/recipes/filter";
+    fetchRecipes(url);
+  };
 
   const handleMeatInput = (event) => {
     setMeatInput(event.target.value);
@@ -32,9 +59,9 @@ const Recipes = () => {
   };
   return (
     <>
-      <ReactContext.Provider>
-        value=
-        {{
+      <h1>text</h1>
+      {/* <ReactContext.Provider
+        value={{
           meatInput,
           setMeatInput,
           vegInput,
@@ -52,7 +79,10 @@ const Recipes = () => {
           handleCaloriesInput,
           handlePrepInput,
         }}
-      </ReactContext.Provider>
+      >
+        <RecipeSearch />
+        <RecipeResults />
+      </ReactContext.Provider> */}
     </>
   );
 };
