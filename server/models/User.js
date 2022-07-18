@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     isAdmin: Boolean,
+    savedRecipes: { type: Array, default: [] },
   },
   // storage location
   { collection: "users" }

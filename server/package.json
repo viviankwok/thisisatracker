@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/viviankwok/thisisatracker#readme",
   "dependencies": {
+    "check": "^1.0.0",
     "express-validator": "^6.14.2"
   },
   "devDependencies": {

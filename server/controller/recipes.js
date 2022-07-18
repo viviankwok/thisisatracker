@@ -9,8 +9,9 @@ const { v4: uuid } = require("uuid");
 const Recipe = require("../models/Recipe");
 const auth = require("../middleware/auth");
 const User = require("../models/User");
+const { check, validationResult } = require("express-validator");
 
-// TESTING
+// TESTING (for dev purposes)
 router.get("/testing", async (req, res) => {
   try {
     res.send("yes it works");
@@ -20,7 +21,7 @@ router.get("/testing", async (req, res) => {
   }
 });
 
-// SEED
+// SEED (for dev purposes)
 router.post("/seed", async (req, res) => {
   try {
     Recipe.collection.drop();
@@ -65,12 +66,68 @@ router.post("/seed", async (req, res) => {
   }
 });
 
-// UDPATE/EDIT - with fake auth
-router.patch("/edit", async (req, res) => {
-  const isAdmin = true;
+// GET ALL
+router.get("/recipes", auth, async (req, res) => {
+  const recipes = await Recipe.find();
+  res.json(recipes);
+});
+
+// CREATE
+router.post(
+  "/create",
+  auth,
+  [
+    // all fields exceipt instructions are required
+    check("name", "Name is required.").not().isEmpty(),
+    check("meat", "Please select a protein.").not().isEmpty(),
+    check("veg", "Veg is required.").not().isEmpty(),
+    check("calories", "Calories is required.").not().isEmpty(),
+    check("prepTime", "Preparation time is required.").not().isEmpty(),
+    check("tags", "Please select all tags that apply.").not().isEmpty(),
+  ],
+  async (req, res) => {
+    try {
+      const newRecipe = Recipe.create(req.body);
+      console.log(`new recipe created: ${newRecipe}`);
+      res.json("Recipe created.");
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ status: 400, message: "An error has occurred." });
+    }
+  }
+);
+
+// FILTER
+router.post("/filter", auth, async (req, res) => {
+  try {
+    // search criteria: any tags AND any meatTags AND any vegTags
+    // does not work if any of the req.body.tags/meatTags/vegTags are empty
+    const recipes = await Recipe.find({
+      tags: { $elemMatch: { $in: req.body.tags } },
+      meat: { $elemMatch: { $in: req.body.meatTags } },
+      veg: { $elemMatch: { $in: req.body.vegTags } },
+    });
+    console.log(`req.body.tags: ${req.body.tags}`);
+    console.log(`req.body.meatTags: ${req.body.meatTags}`);
+    console.log(`req.body.vegTags: ${req.body.vegTags}`);
+
+    res.json(recipes);
+  } catch (error) {
+    console.log(error);
+    return res.status(401).json({
+      status: "error",
+      message: "An error occured.",
+    });
+  }
+});
+
+// UDPATE/EDIT - admin only
+router.patch("/edit", auth, async (req, res) => {
+  console.log("req.decoded.isAdmin: ", req.decoded.isAdmin);
+
   try {
     // if user IS admin => search and edit db
-    if (isAdmin) {
+    if (req.decoded.isAdmin) {
       const recipe = await Recipe.find({ _id: req.body.id });
       await Recipe.updateOne(
         { _id: req.body.id },
@@ -103,35 +160,22 @@ router.patch("/edit", async (req, res) => {
   }
 });
 
-// DELETE
-router.delete("/delete", async (req, res) => {
-  try {
-    await Recipe.deleteOne({ _id: req.body.id });
-    res.json({ status: "ok!", message: "Recipe deleted." });
-  } catch (error) {
-    console.log(error);
-    return res.status(401).json({
-      status: "error",
-      message: "An error occured.",
-    });
-  }
-});
+// DELETE - admin only
+router.delete("/delete", auth, async (req, res) => {
+  console.log("DELETE /delete path activated");
+  console.log("req.decoded.isAdmin: ", req.decoded.isAdmin);
 
-// // FILTER
-router.post("/filter", async (req, res) => {
   try {
-    // search criteria: any tags AND any meatTags AND any vegTags
-    // does not work if any of the req.body.tags/meatTags/vegTags are empty
-    const recipes = await Recipe.find({
-      tags: { $elemMatch: { $in: req.body.tags } },
-      meat: { $elemMatch: { $in: req.body.meatTags } },
-      veg: { $elemMatch: { $in: req.body.vegTags } },
-    });
-    console.log(`req.body.tags: ${req.body.tags}`);
-    console.log(`req.body.meatTags: ${req.body.meatTags}`);
-    console.log(`req.body.vegTags: ${req.body.vegTags}`);
-
-    res.json(recipes);
+    if (req.decoded.isAdmin) {
+      await Recipe.deleteOne({ _id: req.body.id });
+      res.json({ status: "ok!", message: "Recipe deleted." });
+    } else {
+      console.log(error);
+      return res.status(401).json({
+        status: "error",
+        message: "Unauthorised to edit. Don't anyhow try.",
+      });
+    }
   } catch (error) {
     console.log(error);
     return res.status(401).json({
