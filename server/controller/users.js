@@ -126,11 +126,22 @@ router.get("/users", auth, async (req, res) => {
 
 router.get("/logout", auth, async (req, res) => {
   try {
-    const user = await User.findByIdAndRemove(req.decoded.id);
-    console.log(req.decoded.id);
+    // remove tokens from env in postman
+    // redirect user to home page
     res.json("User Logged Out.");
   } catch (error) {
-    console.log("GET /users", error);
+    console.log("GET /logout", error);
+    res.status(400).json({ status: "error", message: "An error has occurred" });
+  }
+});
+
+router.delete("/delete", auth, async (req, res) => {
+  try {
+    const user = await User.findByIdAndRemove(req.decoded.id);
+    console.log(req.decoded.id);
+    res.json("User deleted.");
+  } catch (error) {
+    console.log("DELETE /delete", error);
     res.status(400).json({ status: "error", message: "An error has occurred" });
   }
 });
