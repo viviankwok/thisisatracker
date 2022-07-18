@@ -1,8 +1,40 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import styles from "./NavBar.module.css";
 
 const NavBar = () => {
-  return <div></div>;
+  return (
+    <header className={styles.navbar}>
+      <nav>
+        <ul>
+          <li>
+            <NavLink
+              to="/Main"
+              className={(navData) => (navData.isActive ? styles.active : "")}
+            >
+              Home Page
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/Recipe"
+              className={(navData) => (navData.isActive ? styles.active : "")}
+            >
+              Recipe Search
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/CalorieTracker"
+              className={(navData) => (navData.isActive ? styles.active : "")}
+            >
+              Calorie Tracker
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
 };
 
 export default NavBar;

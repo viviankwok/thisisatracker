@@ -1,5 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
 
+:root {
+  --mustard: #fae6b1;
+  --orange: #ffa101;
+  --lightBlue: #b3dee5;
+  --darkBlue: #31525b;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -10,7 +17,7 @@ html {
 
 body {
   margin: 0;
-  background-color: whitesmoke;
+  background-color: var(--lightBlue);
 }
 
 .centered {
@@ -19,4 +26,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.headerTitle {
+  text-align: center;
+  background-color: var(--darkBlue);
+  color: white;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  height: 100%;
+}
+
+.mainPage {
+  text-align: center;
 }
