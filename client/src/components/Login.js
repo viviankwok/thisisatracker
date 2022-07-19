@@ -1,43 +1,51 @@
 import React, { useState, useContext } from "react";
 import LoginForm from "./LoginForm";
-
+import ReactContext from "../context/react.context";
+import View from "./View";
 const Login = () => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [loginData, setLoginData] = useState("");
 
-  const fetchLogin = async (emailInput, passwordInput) => {
+  const fetchLogin = async () => {
     setIsLoading(true);
-    setError(null);
+    // setError(null);
 
     const url = "http://localhost:5001/users/login";
+    console.log("This is url");
+    console.log(url);
+
     const config = {
       method: "POST",
       headers: {
-        authorization: "Bearer TOKEN",
+        // authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
       },
       // body: {email: req.body.email, password: req.body.password},
-      body: { email: emailInput, password: passwordInput },
+      body: JSON.stringify({ email: emailInput, password: passwordInput }),
     };
 
-    try {
-      const res = await fetch(url, config);
-      if (res.status !== 200) {
-        throw new Error(
-          "Something went wrong. Please check if all inputs fields are clicked"
-        );
-      }
+    // try {
+    const res = await fetch(url, config);
+    // if (res.status !== 200) {
+    //   throw new Error(
+    //     "Something went wrong. Please check if all inputs fields are clicked"
+    //   );
+    // }
 
-      const data = await res.json();
-      setLoginData(data);
-    } catch (err) {
-      setError(err.message);
-    }
+    const data = await res.json();
+    setLoginData(data.access);
+    // } catch (err) {
+    //   setError(err.message);
+    // }
     setIsLoading(false);
   };
+
+  console.log("this is data");
+  console.log(loginData);
 
   ////////////////////////////////////////////
   // Submit Function
@@ -58,6 +66,7 @@ const Login = () => {
   };
 
   let content = "";
+  console.log(loginData);
   if (loginData) {
     content = (
       <div>
@@ -65,13 +74,14 @@ const Login = () => {
       </div>
     );
   }
-  if (error) {
-    content = <p>{error}</p>;
-  }
+  // if (error) {
+  //   content = <p>{error}</p>;
+  // }
 
   if (isLoading) {
     content = <p>Logging in .. please wait</p>;
   }
+
   return (
     <>
       <LoginForm
@@ -81,6 +91,9 @@ const Login = () => {
         handleEmailInput={handleEmailInput}
         handlePasswordInput={handlePasswordInput}
       />
+      <ReactContext.Provider value={{ loginData }}>
+        <View />
+      </ReactContext.Provider>
       {content}
     </>
   );
