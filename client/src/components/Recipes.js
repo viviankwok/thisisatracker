@@ -1,66 +1,67 @@
 import React, { useState, useEffect } from "react";
 import RecipeSearch from "./RecipeSearch";
-import RecipeResults from "./RecipeResults";
 import ReactContext from "../context/react.context";
+import RecipeResults from "./RecipeResults";
+
 const Recipes = () => {
-  const [meatInput, setMeatInput] = useState("");
-  const [vegInput, setVegInput] = useState("");
-  const [tagsInput, setTagsInput] = useState("");
+  // radio buttons states
+  const [meatInput, setMeatInput] = useState([]);
+  const [vegInput, setVegInput] = useState("testing veg");
+  const [tagsInput, setTagsInput] = useState("testing tags");
+  // sliders states
   const [caloriesInput, setCaloriesInput] = useState("");
   const [prepTimeInput, setPrepTimeInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [recipeData, setRecipeData] = useState("");
+  const [recipeData, setRecipeData] = useState([]);
 
-  const fetchRecipes = async (url) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch(url);
-      if (res.status !== 200) {
-        throw new Error(
-          "Something went wrong. Please check if all inputs fields are clicked"
-        );
-      }
-
-      const data = await res.json();
-      setRecipeData(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleSearchSubmit = (event) => {
+  // handle criteria search - meat, veg, tags input only
+  const handleSearch = (event) => {
     event.preventDefault();
+    console.log("handleSearchSubmit in recipes component activated");
+    console.log("typeof meatInput :", typeof meatInput);
 
-    const url = "http://localhost:5001/recipes/filter";
-    fetchRecipes(url);
+    const getData = async () => {
+      // endpoint URL
+      const url = "http://localhost:5001/recipes/filter";
+
+      // fetch config
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          meatTags: [meatInput],
+          vegTags: [vegInput],
+          tags: [tagsInput],
+        }),
+      };
+
+      // actual fetching
+      console.log("fetch starts");
+      const response = await fetch(url, config);
+      console.log("fetch ends");
+
+      const data = await response.json();
+      console.log("data fetched from backend: ", JSON.stringify(data));
+      setRecipeData(data);
+    };
+
+    getData();
   };
 
-  const handleMeatInput = (event) => {
-    setMeatInput(event.target.value);
-  };
+  // const handleCaloriesInput = (event) => {
+  //   setMeatInput(event.target.value);
+  // };
 
-  const handleVegInput = (event) => {
-    setMeatInput(event.target.value);
-  };
+  // const handlePrepInput = (event) => {
+  //   setMeatInput(event.target.value);
+  // };
 
-  const handleTagsInput = (event) => {
-    setMeatInput(event.target.value);
-  };
-
-  const handleCaloriesInput = (event) => {
-    setMeatInput(event.target.value);
-  };
-
-  const handlePrepInput = (event) => {
-    setMeatInput(event.target.value);
-  };
   return (
     <>
-      <h1>text</h1>
-      {/* <ReactContext.Provider
+      <ReactContext.Provider
         value={{
           meatInput,
           setMeatInput,
@@ -72,17 +73,12 @@ const Recipes = () => {
           setCaloriesInput,
           prepTimeInput,
           setPrepTimeInput,
-          handleSearchSubmit,
-          handleMeatInput,
-          handleVegInput,
-          handleTagsInput,
-          handleCaloriesInput,
-          handlePrepInput,
         }}
       >
-        <RecipeSearch />
-        <RecipeResults />
-      </ReactContext.Provider> */}
+        <h1>Recipes component</h1>
+        <RecipeSearch handleSearch={handleSearch} />
+        <RecipeResults recipeData={recipeData} />
+      </ReactContext.Provider>
     </>
   );
 };

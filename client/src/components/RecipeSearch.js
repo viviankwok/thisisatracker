@@ -1,39 +1,66 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import ReactContext from "../context/react.context";
+// import Slider from "@material-ui/core/Slider";
+// import { calories, setCalories } from "./RangeSlider";
 
 const RecipeSearch = (props) => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("submit btn clicked");
+  const reactCtx = useContext(ReactContext);
+
+  const handleMeatInput = (event) => {
+    console.log(`${event.target.value} clicked`);
+    reactCtx.setMeatInput(event.target.value);
   };
+
+  const handleVegInput = (event) => {
+    console.log(`${event.target.value} clicked`);
+    reactCtx.setVegInput(event.target.value);
+  };
+
+  const handleTagsInput = (event) => {
+    console.log(`${event.target.value} clicked`);
+    reactCtx.setTagsInput(event.target.value);
+  };
+
+  // const handleChange = (event, newCalories) => {
+  //   setCalories(newCalories);
+  // };
+
+  // function valuetext(value) {
+  //   return `${value}°C`;
+  // }
 
   return (
     <div id="recipe-search">
       RecipeSearch component
       <br />
-      <form onSubmit={handleSubmit}>
-        <div className="search-category">
+      <form onSubmit={props.handleSearch}>
+        {/* ==================== MEAT/PROTEIN ==================== */}
+        <div className="search-category" onChange={handleMeatInput}>
           <h2>Protein</h2>
           <input type="radio" value="chicken" name="meat" />
           Chicken <br />
-          <input type="radio" value="chicken" name="meat" />
+          <input type="radio" value="beef" name="meat" />
           Beef <br />
-          <input type="radio" value="chicken" name="meat" />
+          <input type="radio" value="mutton" name="meat" />
           Mutton <br />
-          <input type="radio" value="chicken" name="meat" />
+          <input type="radio" value="pork" name="meat" />
           Pork <br />
         </div>
-        <div className="search-category">
+        {/* ==================== VEG ==================== */}
+        <div className="search-category" onChange={handleVegInput}>
           <h2>Veg</h2>
-          <input type="radio" value="Lettuce" name="veg" />
+          <input type="radio" value="lettuce" name="veg" />
           Lettuce <br />
-          <input type="radio" value="Tomato" name="veg" />
+          <input type="radio" value="tomato" name="veg" />
           Tomato <br />
-          <input type="radio" value="Cabbage" name="veg" />
+          <input type="radio" value="cabbage" name="veg" />
           Cabbage <br />
-          <input type="radio" value="Baby Spinach" name="veg" />
+          <input type="radio" value="baby spinach" name="veg" />
           Baby Spinach <br />
         </div>
-        <div className="search-category">
+        {/* ==================== TAGS ==================== */}
+
+        <div className="search-category" onChange={handleTagsInput}>
           <h2>Tags</h2>
           <input type="radio" value="healthy" name="tags" />
           Healthy <br />
@@ -44,8 +71,31 @@ const RecipeSearch = (props) => {
           <input type="radio" value="heavenly" name="tags" />
           Heavenly <br />
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit">Search</button>
       </form>
+      {/* ==================== SLIDER - CALORIES ==================== */}
+      {/* <h2>Calories</h2>
+      <input
+        type="range"
+        min="1"
+        max="100"
+        // value={value}
+        // onChange={handleSliderChange}
+      />
+      <Slider
+        getAriaLabel={() => "Temperature range"}
+        value={calories}
+        onChange={handleChange}
+        valueLabelDisplay="auto"
+        getAriaValueText={valuetext}
+      /> */}
+      {/* ==================== SLIDER - PREP TIME ==================== */}
+      Meat input: {reactCtx.meatInput}
+      <br />
+      Veg input: {reactCtx.vegInput}
+      <br />
+      Tags input: {reactCtx.tagsInput}
+      <br />
     </div>
   );
 };

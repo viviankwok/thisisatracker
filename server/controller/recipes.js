@@ -12,12 +12,17 @@ const User = require("../models/User");
 const { check, validationResult } = require("express-validator");
 
 // TESTING (for dev purposes)
-router.get("/testing", async (req, res) => {
+router.post("/testing", async (req, res) => {
+  console.log("GET /testing route activated");
+  console.log("req.body.text NEW ", req.body.meatTags);
+  console.log("req.body.text NEW ", req.body.vegTags);
+  console.log("req.body.text NEW ", req.body.tags);
+
   try {
-    res.send("yes it works");
+    res.json("yes it works");
   } catch (error) {
     console.log(error);
-    res.send("got error ");
+    res.json("got error");
   }
 });
 
@@ -98,7 +103,13 @@ router.post(
 );
 
 // FILTER
-router.post("/filter", auth, async (req, res) => {
+// router.post("/filter", auth, async (req, res) => {
+router.post("/filter", async (req, res) => {
+  console.log("POST /filter route activated");
+  console.log("req.body.meatTags: ", req.body.meatTags);
+  console.log("req.body.vegTags: ", req.body.vegTags);
+  console.log("req.body.tags: ", req.body.tags);
+
   try {
     // search criteria: any tags AND any meatTags AND any vegTags
     // does not work if any of the req.body.tags/meatTags/vegTags are empty
@@ -107,9 +118,6 @@ router.post("/filter", auth, async (req, res) => {
       meat: { $elemMatch: { $in: req.body.meatTags } },
       veg: { $elemMatch: { $in: req.body.vegTags } },
     });
-    console.log(`req.body.tags: ${req.body.tags}`);
-    console.log(`req.body.meatTags: ${req.body.meatTags}`);
-    console.log(`req.body.vegTags: ${req.body.vegTags}`);
 
     res.json(recipes);
   } catch (error) {
