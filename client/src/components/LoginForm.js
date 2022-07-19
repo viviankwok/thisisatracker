@@ -23,9 +23,10 @@ const LoginForm = (props) => {
               value={props.passwordInput}
               onChange={props.handlePasswordInput}
               type="password"
-              placeholder="Enter Email Here"
+              placeholder="Enter Password Here"
             />
           </div>
+          <button type="submit">Submit</button>
         </form>
       </div>
       ;
