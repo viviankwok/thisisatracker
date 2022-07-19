@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import Main from "./components/Main";
 import Recipes from "./components/Recipes";
 import CalorieTracker from "./components/CalorieTracker";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate replace to="/Main" />} />
           <Route path="/Main" element={<Main />} />
-          <Route path="/Recipe" element={<Recipes />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Recipes" element={<Recipes />} />
           <Route path="/CalorieTracker" element={<CalorieTracker />} />
         </Routes>
       </main>
