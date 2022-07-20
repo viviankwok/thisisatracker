@@ -102,3 +102,7 @@ span:hover {
 #delete {
   font-size: small;
 }
+
+#logout {
+  margin-left: 65%;
+}
