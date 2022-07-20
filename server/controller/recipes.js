@@ -131,8 +131,7 @@ router.post(
 );
 
 // FILTER
-// router.post("/filter", auth, async (req, res) => {
-router.post("/filter", async (req, res) => {
+router.post("/filter", auth, async (req, res) => {
   console.log("POST /filter route activated");
   console.log("req.body.meatTags: ", req.body.meatTags);
   console.log("req.body.vegTags: ", req.body.vegTags);

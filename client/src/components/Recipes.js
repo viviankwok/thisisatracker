@@ -49,6 +49,7 @@ const Recipes = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: "Bearer " + accessToken,
         },
         body: JSON.stringify({
           meatTags: [meatInput],
@@ -58,10 +59,7 @@ const Recipes = () => {
       };
 
       // actual fetching
-      console.log("fetch starts");
       const response = await fetch(url, config);
-      console.log("fetch ends");
-
       const data = await response.json();
       console.log("data fetched from backend: ", JSON.stringify(data));
       setRecipeData(data);
