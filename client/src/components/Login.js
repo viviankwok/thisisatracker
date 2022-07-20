@@ -1,101 +1,122 @@
-import React, { useState, useContext } from "react";
-import LoginForm from "./LoginForm";
-import ReactContext from "../context/react.context";
-import View from "./View";
-const Login = () => {
-  const [emailInput, setEmailInput] = useState("");
-  const [passwordInput, setPasswordInput] = useState("");
+// import React, { useState, useContext, useEffect } from "react";
+// import LoginForm from "./LoginForm";
+// import ReactContext from "../context/react.context";
+// import View from "./View";
+// const Login = () => {
+//   const [emailInput, setEmailInput] = useState("");
+//   const [passwordInput, setPasswordInput] = useState("");
 
-  const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
-  const [loginData, setLoginData] = useState("");
+//   const [isLoading, setIsLoading] = useState(false);
+//   // const [error, setError] = useState(null);
+//   const initialState = localStorage.getItem("loginAccess")
+//     ? localStorage.getItem("loginAccess")
+//     : "";
 
-  const fetchLogin = async () => {
-    setIsLoading(true);
-    // setError(null);
+//   const [loginData, setLoginData] = useState(initialState);
 
-    const url = "http://localhost:5001/users/login";
-    console.log("This is url");
-    console.log(url);
+//   const fetchLogin = async () => {
+//     setIsLoading(true);
+//     // setError(null);
 
-    const config = {
-      method: "POST",
-      headers: {
-        // authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      },
-      // body: {email: req.body.email, password: req.body.password},
-      body: JSON.stringify({ email: emailInput, password: passwordInput }),
-    };
+//     const url = "http://localhost:5001/users/login";
+//     console.log("This is url");
+//     console.log(url);
 
-    // try {
-    const res = await fetch(url, config);
-    // if (res.status !== 200) {
-    //   throw new Error(
-    //     "Something went wrong. Please check if all inputs fields are clicked"
-    //   );
-    // }
+//     const config = {
+//       method: "POST",
+//       headers: {
+//         // authorization: "Bearer " + access_token,
+//         "Content-Type": "application/json",
+//       },
+//       // body: {email: req.body.email, password: req.body.password},
+//       body: JSON.stringify({ email: emailInput, password: passwordInput }),
+//     };
 
-    const data = await res.json();
-    setLoginData(data.access);
-    // } catch (err) {
-    //   setError(err.message);
-    // }
-    setIsLoading(false);
-  };
+//     // try {
+//     const res = await fetch(url, config);
+//     // if (res.status !== 200) {
+//     //   throw new Error(
+//     //     "Something went wrong. Please check if all inputs fields are clicked"
+//     //   );
+//     // }
 
-  console.log("this is data");
-  console.log(loginData);
+//     const data = await res.json();
+//     setLoginData(data.access);
+//     // } catch (err) {
+//     //   setError(err.message);
+//     // }
+//     setIsLoading(false);
+//   };
 
-  ////////////////////////////////////////////
-  // Submit Function
-  ////////////////////////////////////////////
-  const handleLoginSubmit = (event) => {
-    event.preventDefault();
+//   console.log("this is data");
+//   console.log(loginData);
 
-    // const url = "http://localhost:5001/users/login";
-    fetchLogin(emailInput, passwordInput);
-  };
+//   /////////////////////////////////////////////
+//   // Local Storage
+//   /////////////////////////////////////////////
+//   useEffect(() => {
+//     localStorage.setItem("loginAccess", loginData);
+//   }, [loginData]);
 
-  const handleEmailInput = (event) => {
-    setEmailInput(event.target.value);
-  };
+//   ////////////////////////////////////////////
+//   // Logout
+//   ////////////////////////////////////////////
+//   const logout = () => localStorage.setItem("loginAccess", "");
 
-  const handlePasswordInput = (event) => {
-    setPasswordInput(event.target.value);
-  };
+//   ////////////////////////////////////////////
+//   // Submit Function
+//   ////////////////////////////////////////////
+//   const handleLoginSubmit = (event) => {
+//     event.preventDefault();
 
-  let content = "";
-  console.log(loginData);
-  if (loginData) {
-    content = (
-      <div>
-        <h3>Login Successful</h3>
-      </div>
-    );
-  }
-  // if (error) {
-  //   content = <p>{error}</p>;
-  // }
+//     // const url = "http://localhost:5001/users/login";
+//     fetchLogin(emailInput, passwordInput);
+//   };
 
-  if (isLoading) {
-    content = <p>Logging in .. please wait</p>;
-  }
+//   const handleEmailInput = (event) => {
+//     setEmailInput(event.target.value);
+//   };
 
-  return (
-    <>
-      <LoginForm
-        emailInput={emailInput}
-        passwordInput={passwordInput}
-        handleLoginSubmit={handleLoginSubmit}
-        handleEmailInput={handleEmailInput}
-        handlePasswordInput={handlePasswordInput}
-      />
-      <ReactContext.Provider value={{ loginData }}>
-        <View />
-      </ReactContext.Provider>
-      {content}
-    </>
-  );
-};
-export default Login;
+//   const handlePasswordInput = (event) => {
+//     setPasswordInput(event.target.value);
+//   };
+
+//   let content = "";
+//   console.log(loginData);
+//   if (loginData) {
+//     content = (
+//       <div>
+//         <h3>Login Successful</h3>
+//       </div>
+//     );
+//   }
+//   // if (error) {
+//   //   content = <p>{error}</p>;
+//   // }
+
+//   if (isLoading) {
+//     content = <p>Logging in .. please wait</p>;
+//   }
+
+//   return (
+//     <>
+//       <LoginForm
+//         emailInput={emailInput}
+//         passwordInput={passwordInput}
+//         handleLoginSubmit={handleLoginSubmit}
+//         handleEmailInput={handleEmailInput}
+//         handlePasswordInput={handlePasswordInput}
+//       />
+//       <button id="logout" onClick={logout}>
+//         Log Out
+//       </button>
+
+//       <ReactContext.Provider value={{ loginData }}>
+//         <View />
+//       </ReactContext.Provider>
+
+//       {content}
+//     </>
+//   );
+// };
+// export default Login;
