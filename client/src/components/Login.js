@@ -2,9 +2,12 @@ import React, { useState, useContext } from "react";
 import LoginForm from "./LoginForm";
 import ReactContext from "../context/react.context";
 import View from "./View";
+import RegisterModal from "./RegisterModal";
+
 const Login = () => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
+  const [openRegisterModal, setOpenRegisterModal] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState(null);
@@ -65,6 +68,15 @@ const Login = () => {
     setPasswordInput(event.target.value);
   };
 
+  const handleRegisterSubmit = (event) => {
+    event.preventDefault();
+    setOpenRegisterModal(true);
+  };
+
+  const handleModalOkay = () => {
+    setOpenRegisterModal(false);
+  };
+
   let content = "";
   console.log(loginData);
   if (loginData) {
@@ -84,12 +96,15 @@ const Login = () => {
 
   return (
     <>
+      {openRegisterModal && <RegisterModal okayClicked={handleModalOkay} />}
+      ;
       <LoginForm
         emailInput={emailInput}
         passwordInput={passwordInput}
         handleLoginSubmit={handleLoginSubmit}
         handleEmailInput={handleEmailInput}
         handlePasswordInput={handlePasswordInput}
+        handleRegisterSubmit={handleRegisterSubmit}
       />
       <ReactContext.Provider value={{ loginData }}>
         <View />
