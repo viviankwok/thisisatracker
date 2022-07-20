@@ -71,22 +71,6 @@ body {
   align-items: center;
 }
 
-#recipe-card {
-  background-color: var(--orange);
-  height: 300px;
-  width: 250px;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 10px;
-}
-
-#recipe-results {
-  /* background-color: green; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .link {
   display: flex;
   justify-content: center;
@@ -105,4 +89,84 @@ span:hover {
 
 #logout {
   margin-left: 65%;
+}
+
+.errorLogin {
+  margin-left: 40%;
+  background-color: var(--mustard);
+  width: 20%;
+  text-align: center;
+}
+
+.loginForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--mustard);
+  padding: 0px 60px;
+  border-radius: 10px;
+}
+.button {
+  width: 50%;
+  padding: 10px;
+  border: none;
+  background-color: var(--darkBlue);
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
+.headerTitle span:hover {
+  background-color: var(--orange);
+  color: whitesmoke;
+  font-weight: bold;
+}
+
+.logout {
+  margin-left: 60%;
+}
+
+.viewAllUsers {
+  margin-left: 20%;
+}
+
+.capitalise {
+  text-transform: capitalize;
+}
+.small {
+  font-size: small;
+  height: min-inher;
+}
+#recipe-name {
+  font-size: large;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+#bold {
+  font-weight: bolder;
+}
+
+#recipe-results {
+  /* background-color: green; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+#recipe-card {
+  background-color: var(--orange);
+  display: inline-block;
+  height: 300px;
+  width: 250px;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
 }

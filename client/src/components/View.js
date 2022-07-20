@@ -5,7 +5,7 @@ const View = () => {
   const reactCtx = useContext(ReactContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [viewData, setViewData] = useState({});
+  const [viewData, setViewData] = useState([]);
 
   const handleViewSubmit = (event) => {
     event.preventDefault();
@@ -56,9 +56,17 @@ const View = () => {
 
   let content = "";
   console.log(viewData);
-  const viewTheData = JSON.stringify(viewData);
+  // const viewTheData = JSON.stringify(viewData);
   if (viewData) {
-    content = <div>{viewTheData}</div>;
+    // content = <div>{viewTheData}</div>;
+    content = viewData.map((item) => {
+      return (
+        <>
+          <div className="center">name: {item.name}</div>
+          <div className="center">email: {item.email}</div>
+        </>
+      );
+    });
   }
   if (error) {
     content = <p>{error}</p>;
@@ -71,8 +79,7 @@ const View = () => {
 
   return (
     <>
-      {accessToken}
-      <div>
+      <div className="viewAllUsers">
         <button onClick={handleViewSubmit}>View all</button>
         {content}
       </div>

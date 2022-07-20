@@ -18,7 +18,7 @@ function App() {
   const [loginInvalid, setLoginInvalid] = useState({});
 
   const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
   const initialState = localStorage.getItem("loginAccess")
     ? localStorage.getItem("loginAccess")
     : "";
@@ -36,11 +36,9 @@ function App() {
 
   const fetchLogin = async () => {
     setIsLoading(true);
-    // setError(null);
+    setError(null);
 
     const url = "http://localhost:5001/users/login";
-    console.log("This is url");
-    console.log(url);
 
     const config = {
       method: "POST",
@@ -52,24 +50,21 @@ function App() {
       body: JSON.stringify({ email: emailInput, password: passwordInput }),
     };
 
-    // try {
-    const res = await fetch(url, config);
-    // if (res.status !== 200) {
-    //   throw new Error(
-    //     "Something went wrong. Please check if all inputs fields are clicked"
-    //   );
-    // }
+    try {
+      const res = await fetch(url, config);
+      if (res.status !== 200) {
+        throw new Error(
+          "Something went wrong. Please check if all inputs fields are valid or authorized"
+        );
+      }
 
-    const data = await res.json();
-    setLoginData(data.access);
-    // } catch (err) {
-    //   setError(err.message);
-    // }
+      const data = await res.json();
+      setLoginData(data.access);
+    } catch (err) {
+      setError(err.message);
+    }
     setIsLoading(false);
   };
-
-  console.log("this is data");
-  console.log(loginData);
 
   /////////////////////////////////////////////
   // Local Storage
@@ -81,7 +76,10 @@ function App() {
   ////////////////////////////////////////////
   // Logout
   ////////////////////////////////////////////
-  const logout = () => localStorage.setItem("loginAccess", "");
+  const logout = () => {
+    localStorage.setItem("loginAccess", "");
+    alert("Logged out");
+  };
 
   ////////////////////////////////////////////
   // Submit Function
@@ -93,19 +91,19 @@ function App() {
 
   const handleLoginSubmit = (event) => {
     event.preventDefault();
-
+    const emailCheck =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (validFields) {
       // const url = "http://localhost:5001/users/login";
       fetchLogin(emailInput, passwordInput);
 
-      if (!emailInput.includes("@)")) {
-        setLoginInvalid({ email: "Please enter a valid email" });
-      }
-
       if (passwordInput.length < 12) {
         setLoginInvalid({
-          password: "Please enter a password with at least 12 characters.",
+          password: "Password is not correct or is less than 12 characters.",
         });
+      }
+      if (!emailInput.match(emailCheck)) {
+        setLoginInvalid({ email: "Please enter a valid email" });
       }
     }
   };
@@ -118,28 +116,13 @@ function App() {
     setPasswordInput(event.target.value);
   };
 
-  let content = "";
-  console.log(loginData);
-  if (loginData) {
-    content = (
-      <div>
-        <h3>Login Successful</h3>
-      </div>
-    );
-  }
-  // if (error) {
-  //   content = <p>{error}</p>;
-  // }
-
-  if (isLoading) {
-    content = <p>Logging in .. please wait</p>;
-  }
-
   return (
     <div>
       <div className="headerTitle">
+        <span className="logout" onClick={logout}>
+          Log Out
+        </span>
         <h2>Recipe Tracker</h2>
-        {JSON.stringify(validFields)}
       </div>
       <NavBar />
       <main>
@@ -152,6 +135,8 @@ function App() {
               <ReactContext.Provider
                 value={{
                   loginData,
+                  error,
+                  isLoading,
                   emailInput,
                   passwordInput,
                   handleLoginSubmit,
