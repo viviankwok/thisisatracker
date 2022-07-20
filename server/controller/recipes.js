@@ -30,33 +30,39 @@ router.post("/testing", async (req, res) => {
 router.post("/seed", async (req, res) => {
   try {
     Recipe.collection.drop();
+
+    // for reference
+    const meat = ["chicken", "beef", "pork", "impossible meat"];
+    const veg = ["lettuce", "tomato", "cabbage", "baby spinach"];
+    const tags = ["healthy", "quick", "easy", "refreshing"];
+
     const initRecipe = [
       {
         name: "avocado sandwhich",
         meat: ["impossible meat"],
         veg: ["lettuce", "cucumber", "tomatoes"],
-        calories: 450,
-        instructions: "Take avocado and sandwhich it.",
+        calories: 195,
+        instructions: "Slice avocado and sandwich it.",
         prepTime: 5,
-        tags: ["healthy", "delicious", "easy", "avocado", "lovely", "hahaha"],
+        tags: ["healthy", "refreshing", "easy"],
       },
       {
         name: "banana sandwhich",
-        meat: ["chicken"],
-        veg: ["lettuce", "olives", "cabbage"],
-        calories: 450,
-        instructions: "Take banana and sandwhich it.",
+        meat: ["beef"],
+        veg: ["lettuce", "baby spinach"],
+        calories: 165,
+        instructions: "Take banana and sandwich it.",
         prepTime: 5,
-        tags: ["healthy", "yellow outside", "white inside", "peel", "hahaha"],
+        tags: ["healthy", "easy"],
       },
       {
         name: "coconut paprika chicken",
         meat: ["chicken"],
         veg: ["baby spinach"],
-        calories: 450,
-        instructions: "Add coconut and paprika to chicken",
+        calories: 292,
+        instructions: "Combine coconut, paprika and chicken.",
         prepTime: 25,
-        tags: ["healthy", "orange", "beautiful", "tasty", "coconut"],
+        tags: ["healthy", "quick"],
       },
     ];
 
