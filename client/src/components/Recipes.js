@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import RecipeSearch from "./RecipeSearch";
 import ReactContext from "../context/react.context";
 import RecipeResults from "./RecipeResults";
@@ -31,6 +31,9 @@ const Recipes = () => {
   const [instructionsForm, setInstructionsForm] = useState(0);
   const [prepTimeForm, setPrepTimeForm] = useState(0);
   const [idForm, setIdForm] = useState("");
+  // access token
+  const reactCtx = useContext(ReactContext);
+  const accessToken = reactCtx.loginData;
 
   const handleSearch = (event) => {
     event.preventDefault();
