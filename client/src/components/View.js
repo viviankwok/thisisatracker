@@ -4,6 +4,7 @@ import ReactContext from "../context/react.context";
 const View = () => {
   const reactCtx = useContext(ReactContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [viewData, setViewData] = useState({});
 
   const handleViewSubmit = (event) => {
@@ -23,7 +24,7 @@ const View = () => {
   console.log(accessToken);
   const fetchViewUsers = async () => {
     setIsLoading(true);
-    // setError(null);
+    setError(null);
 
     const url = "http://localhost:5001/users/users";
     console.log("This is url");
@@ -39,29 +40,41 @@ const View = () => {
       //   body: JSON.stringify({}),
     };
 
-    // try {
-    const res = await fetch(url, config);
-    // if (res.status !== 200) {
-    //   throw new Error(
-    //     "Something went wrong. Please check if all inputs fields are clicked"
-    //   );
-    // }
+    try {
+      const res = await fetch(url, config);
+      if (res.status !== 200) {
+        throw new Error("Unable to retrieve user data.");
+      }
 
-    const data = await res.json();
-    setViewData(data);
-    // } catch (err) {
-    //   setError(err.message);
-    // }
+      const data = await res.json();
+      setViewData(data);
+    } catch (err) {
+      setError(err.message);
+    }
     setIsLoading(false);
   };
+
+  let content = "";
   console.log(viewData);
   const viewTheData = JSON.stringify(viewData);
+  if (viewData) {
+    content = <div>{viewTheData}</div>;
+  }
+  if (error) {
+    content = <p>{error}</p>;
+  }
+
+  if (isLoading) {
+    content = <p>Logging in .. please wait</p>;
+  }
+  console.log(viewData);
+
   return (
     <>
       {accessToken}
       <div>
         <button onClick={handleViewSubmit}>View all</button>
-        {viewTheData}
+        {content}
       </div>
     </>
   );

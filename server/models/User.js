@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isAdmin: Boolean,
+    isAdmin: { type: Boolean, default: false },
     savedRecipes: { type: Array, default: [] },
   },
   // storage location
