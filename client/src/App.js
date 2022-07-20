@@ -8,10 +8,12 @@ import CalorieTracker from "./components/CalorieTracker";
 import LoginForm from "./components/LoginForm";
 import ReactContext from "./context/react.context";
 import View from "./components/View";
+import RegisterModal from "./components/RegisterModal";
 
 function App() {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
+  const [openRegisterModal, setOpenRegisterModal] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState(null);
@@ -20,6 +22,15 @@ function App() {
     : "";
 
   const [loginData, setLoginData] = useState(initialState);
+
+  const handleRegisterSubmit = (event) => {
+    event.preventDefault();
+    setOpenRegisterModal(true);
+  };
+
+  const handleModalOkay = () => {
+    setOpenRegisterModal(false);
+  };
 
   const fetchLogin = async () => {
     setIsLoading(true);
@@ -129,7 +140,11 @@ function App() {
                   logout,
                 }}
               >
-                <LoginForm /> <View />
+                {openRegisterModal && (
+                  <RegisterModal okayClicked={handleModalOkay} />
+                )}
+                <LoginForm handleRegisterSubmit={handleRegisterSubmit} />{" "}
+                <View />
               </ReactContext.Provider>
             }
           />
