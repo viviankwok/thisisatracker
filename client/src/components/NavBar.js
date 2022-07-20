@@ -7,14 +7,14 @@ const NavBar = () => {
     <header className={styles.navbar}>
       <nav>
         <ul>
-          <li>
+          {/* <li>
             <NavLink
               to="/Main"
               className={(navData) => (navData.isActive ? styles.active : "")}
             >
               Home Page
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink
               to="/Login"
