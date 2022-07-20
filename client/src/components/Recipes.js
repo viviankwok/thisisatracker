@@ -30,6 +30,7 @@ const Recipes = () => {
   const [caloriesForm, setCaloriesForm] = useState(0);
   const [instructionsForm, setInstructionsForm] = useState(0);
   const [prepTimeForm, setPrepTimeForm] = useState(0);
+  const [idForm, setIdForm] = useState("");
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -117,6 +118,7 @@ const Recipes = () => {
       const data = await response.json();
       console.log("data fetched from backend: ", JSON.stringify(data));
 
+      setIdForm(data._id);
       setNameForm(data.name);
       setMeatForm(data.meat);
       setVegForm(data.veg);
@@ -127,6 +129,10 @@ const Recipes = () => {
     };
 
     getData();
+  };
+
+  const handleEditSubmit = (id) => {
+    console.log(`submit edit btn clicked for ${id}`);
 
     // update recipe db with current state
     const updateData = async () => {
@@ -155,23 +161,9 @@ const Recipes = () => {
       const response = await fetch(url, config);
       const data = await response.json();
       console.log("data fetched from backend: ", JSON.stringify(data));
-
-      setNameForm(data.name);
-      setMeatForm(data.meat);
-      setVegForm(data.veg);
-      setTagsForm(data.tags);
-      setCaloriesForm(data.calories);
-      setInstructionsForm(data.instructions);
-      setPrepTimeForm(data.prepTime);
     };
-
     updateData();
-    // setShowEdit(false);
-  };
-
-  const handleEditSubmit = (event) => {
-    event.preventDefault();
-    console.log("submit edit btn clicked");
+    setShowEdit(false);
   };
 
   const handleDelete = (id) => {
@@ -246,7 +238,6 @@ const Recipes = () => {
       console.log("fetch starts");
       const response = await fetch(url, config);
       console.log("fetch ends");
-
       const data = await response.json();
       console.log("data fetched from backend: ", JSON.stringify(data));
     };
@@ -301,6 +292,8 @@ const Recipes = () => {
           setInstructionsForm,
           prepTimeForm,
           setPrepTimeForm,
+          idForm,
+          setIdForm,
         }}
       >
         {showCreate ? (
