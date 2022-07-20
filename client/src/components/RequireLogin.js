@@ -9,7 +9,6 @@ const RequireLogin = () => {
   const location = useLocation();
   return (
     <div>
-      {accessToken}
       {accessToken ? (
         <Outlet />
       ) : (

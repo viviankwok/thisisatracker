@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Route, Navigate, Routes } from "react-router-dom";
 import RequireLogin from "./components/RequireLogin";
 import NavBar from "./components/NavBar";
-import Main from "./components/Main";
+
 import Recipes from "./components/Recipes";
 import CalorieTracker from "./components/CalorieTracker";
 import LoginForm from "./components/LoginForm";
@@ -14,6 +14,8 @@ function App() {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
+  const [validFields, setValidFields] = useState(false);
+  const [loginInvalid, setLoginInvalid] = useState({});
 
   const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState(null);
@@ -84,11 +86,28 @@ function App() {
   ////////////////////////////////////////////
   // Submit Function
   ////////////////////////////////////////////
+
+  useEffect(() => {
+    setValidFields(emailInput !== "" && passwordInput !== "");
+  }, [emailInput, passwordInput]);
+
   const handleLoginSubmit = (event) => {
     event.preventDefault();
 
-    // const url = "http://localhost:5001/users/login";
-    fetchLogin(emailInput, passwordInput);
+    if (validFields) {
+      // const url = "http://localhost:5001/users/login";
+      fetchLogin(emailInput, passwordInput);
+
+      if (!emailInput.includes("@)")) {
+        setLoginInvalid({ email: "Please enter a valid email" });
+      }
+
+      if (passwordInput.length < 12) {
+        setLoginInvalid({
+          password: "Please enter a password with at least 12 characters.",
+        });
+      }
+    }
   };
 
   const handleEmailInput = (event) => {
@@ -120,6 +139,7 @@ function App() {
     <div>
       <div className="headerTitle">
         <h2>Recipe Tracker</h2>
+        {JSON.stringify(validFields)}
       </div>
       <NavBar />
       <main>
@@ -138,29 +158,30 @@ function App() {
                   handleEmailInput,
                   handlePasswordInput,
                   logout,
+                  handleRegisterSubmit,
+                  loginInvalid,
                 }}
               >
                 {openRegisterModal && (
                   <RegisterModal okayClicked={handleModalOkay} />
                 )}
-                <LoginForm handleRegisterSubmit={handleRegisterSubmit} />{" "}
-                <View />
+                <LoginForm /> <View />
               </ReactContext.Provider>
             }
           />
 
           {/* Protect these routes with RequireLogin */}
-          {/* <Route element={<RequireLogin />}> */}
-          <Route
-            path="/Recipes"
-            element={
-              <ReactContext.Provider value={{ loginData }}>
-                <Recipes />
-              </ReactContext.Provider>
-            }
-          />
-          <Route path="/CalorieTracker" element={<CalorieTracker />} />
-          {/* </Route> */}
+          <Route element={<RequireLogin />}>
+            <Route
+              path="/Recipes"
+              element={
+                <ReactContext.Provider value={{ loginData }}>
+                  <Recipes />
+                </ReactContext.Provider>
+              }
+            />
+            <Route path="/CalorieTracker" element={<CalorieTracker />} />
+          </Route>
         </Routes>
       </main>
     </div>

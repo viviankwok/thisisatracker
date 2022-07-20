@@ -16,6 +16,9 @@ const LoginForm = (props) => {
             type="text"
             placeholder="Enter Email Here"
           />
+
+          <p>{reactCtx.loginInvalid.email}</p>
+          <p>{reactCtx.loginInvalid.password}</p>
           <br />
           <br />
           <div>
@@ -29,7 +32,7 @@ const LoginForm = (props) => {
             />
           </div>
           <button type="submit">Submit</button>
-          <button onClick={props.handleRegisterSubmit}>Register</button>
+          <button onClick={reactCtx.handleRegisterSubmit}>Register</button>
         </form>
       </div>
       <button id="button" onClick={reactCtx.logout}>
