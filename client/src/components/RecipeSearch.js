@@ -40,10 +40,10 @@ const RecipeSearch = (props) => {
             Chicken <br />
             <input type="radio" value="beef" name="meat" />
             Beef <br />
-            <input type="radio" value="mutton" name="meat" />
-            Mutton <br />
             <input type="radio" value="pork" name="meat" />
             Pork <br />
+            <input type="radio" value="impossible meat" name="meat" />
+            Impossible Meat <br />
           </div>
           {/* ==================== VEG ==================== */}
           <div className="search-category" onChange={handleVegInput}>
@@ -66,8 +66,8 @@ const RecipeSearch = (props) => {
             Quick <br />
             <input type="radio" value="easy" name="tags" />
             Easy <br />
-            <input type="radio" value="heavenly" name="tags" />
-            Heavenly <br />
+            <input type="radio" value="refreshing" name="tags" />
+            Refreshing <br />
           </div>
           <button type="submit">Search</button>
           <div className="link">
