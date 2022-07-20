@@ -5,7 +5,6 @@ const View = () => {
   const reactCtx = useContext(ReactContext);
   const [isLoading, setIsLoading] = useState(false);
   const [viewData, setViewData] = useState({});
-  // const [accessToken, setAccessToken] = useState();
 
   const handleViewSubmit = (event) => {
     event.preventDefault();
@@ -13,9 +12,13 @@ const View = () => {
     fetchViewUsers();
   };
 
+  // Working
   const accessToken = reactCtx.loginData;
 
   //   const access_token = setAccessToken(reactCtx.loginData);
+
+  // const storedLogin = localStorage.getItem("loginData");
+  // const [accessToken, setAccessToken] = useState(storedLogin);
 
   console.log(accessToken);
   const fetchViewUsers = async () => {

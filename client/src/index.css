@@ -53,3 +53,7 @@ body {
   background-color: red;
   display: inline;
 }
+
+#logout {
+  margin-left: 65%;
+}
