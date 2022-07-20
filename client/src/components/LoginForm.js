@@ -1,16 +1,18 @@
 import React, { useState, useContext } from "react";
-
+import ReactContext from "../context/react.context";
+import View from "./View";
 const LoginForm = (props) => {
+  const reactCtx = useContext(ReactContext);
   return (
     <>
       <h1 className="centered">Login</h1>
       <div className="centered">
-        <form onSubmit={props.handleLoginSubmit}>
+        <form onSubmit={reactCtx.handleLoginSubmit}>
           <label>Enter Your Email: </label>
           <input
             name="email"
-            value={props.emailInput}
-            onChange={props.handleEmailInput}
+            value={reactCtx.emailInput}
+            onChange={reactCtx.handleEmailInput}
             type="text"
             placeholder="Enter Email Here"
           />
@@ -20,8 +22,8 @@ const LoginForm = (props) => {
             <label>Enter Password: </label>
             <input
               name="password"
-              value={props.passwordInput}
-              onChange={props.handlePasswordInput}
+              value={reactCtx.passwordInput}
+              onChange={reactCtx.handlePasswordInput}
               type="password"
               placeholder="Enter Password Here"
             />
@@ -29,6 +31,9 @@ const LoginForm = (props) => {
           <button type="submit">Submit</button>
         </form>
       </div>
+      <button id="button" onClick={reactCtx.logout}>
+        Logout
+      </button>
       ;
     </>
   );
