@@ -34,6 +34,8 @@ const Recipes = () => {
   // access token
   const reactCtx = useContext(ReactContext);
   const accessToken = reactCtx.loginData;
+  // error content
+  const [content, setContent] = useState("");
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -59,13 +61,36 @@ const Recipes = () => {
       };
 
       // actual fetching
-      const response = await fetch(url, config);
-      const data = await response.json();
-      console.log("data fetched from backend: ", JSON.stringify(data));
-      setRecipeData(data);
+      try {
+        const response = await fetch(url, config);
+        if (response.status !== 200) {
+          throw new Error("Unable to retrieve user data.");
+        }
+
+        const data = await response.json();
+        console.log("data fetched from backend: ", JSON.stringify(data));
+        setRecipeData(data);
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
     };
 
     getData();
+
+    if (error) {
+      setContent(
+        "Something went wrong. Might not be your fault, please try again."
+      );
+    }
+
+    if (isLoading) {
+      setContent("Working hard... Please wait.");
+    }
+
+    if (recipeData.length === 0) {
+      setContent("No recipes found. Please try again.");
+    }
   };
 
   const handleViewAll = (event) => {
@@ -86,13 +111,35 @@ const Recipes = () => {
       };
 
       // actual fetching
-      const response = await fetch(url, config);
-      const data = await response.json();
-      console.log("data fetched from backend: ", JSON.stringify(data));
-      setRecipeData(data);
+      try {
+        const response = await fetch(url, config);
+        if (response.status !== 200) {
+          throw new Error("Unable to retrieve user data.");
+        }
+        const data = await response.json();
+        console.log("data fetched from backend: ", JSON.stringify(data));
+        setRecipeData(data);
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
     };
 
     getData();
+
+    if (error) {
+      setContent(
+        "Something went wrong. Might not be your fault, please try again."
+      );
+    }
+
+    if (isLoading) {
+      setContent("Working hard... Please wait.");
+    }
+
+    if (recipeData.length === 0) {
+      setContent("No recipes found. Please try again.");
+    }
   };
 
   const handleUpdate = (id) => {
@@ -118,21 +165,43 @@ const Recipes = () => {
       };
 
       // actual fetching
-      const response = await fetch(url, config);
-      const data = await response.json();
-      console.log("data fetched from backend: ", JSON.stringify(data));
+      try {
+        const response = await fetch(url, config);
+        if (response.status !== 200) {
+          throw new Error("Unable to retrieve user data.");
+        }
+        const data = await response.json();
+        console.log("data fetched from backend: ", JSON.stringify(data));
 
-      setIdForm(data._id);
-      setNameForm(data.name);
-      setMeatForm(data.meat);
-      setVegForm(data.veg);
-      setTagsForm(data.tags);
-      setCaloriesForm(data.calories);
-      setInstructionsForm(data.instructions);
-      setPrepTimeForm(data.prepTime);
+        setIdForm(data._id);
+        setNameForm(data.name);
+        setMeatForm(data.meat);
+        setVegForm(data.veg);
+        setTagsForm(data.tags);
+        setCaloriesForm(data.calories);
+        setInstructionsForm(data.instructions);
+        setPrepTimeForm(data.prepTime);
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
     };
 
     getData();
+
+    if (error) {
+      setContent(
+        "Something went wrong. Might not be your fault, please try again."
+      );
+    }
+
+    if (isLoading) {
+      setContent("Working hard... Please wait.");
+    }
+
+    if (recipeData.length === 0) {
+      setContent("Recipe not found. Please try again.");
+    }
   };
 
   const handleEditSubmit = (id) => {
@@ -165,12 +234,32 @@ const Recipes = () => {
       };
 
       // actual fetching
-      const response = await fetch(url, config);
-      const data = await response.json();
-      console.log("data fetched from backend: ", JSON.stringify(data));
+      try {
+        const response = await fetch(url, config);
+        const data = await response.json();
+        console.log("data fetched from backend: ", JSON.stringify(data));
+        if (response.status !== 200) {
+          throw new Error("Unable to retrieve user data.");
+        }
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
     };
     updateData();
     setShowEdit(false);
+
+    if (error) {
+      setContent(
+        "Something went wrong. Might not be your fault, please try again."
+      );
+    } else {
+      alert("Successfully updated!");
+    }
+
+    if (isLoading) {
+      setContent("Working hard... Please wait.");
+    }
 
     // reset form fields to empty
     setIdForm("");
@@ -204,13 +293,32 @@ const Recipes = () => {
       };
 
       // actual fetching
-      const response = await fetch(url, config);
-      const data = await response.json();
-      console.log("data fetched from backend: ", JSON.stringify(data));
-      alert("Recipe deleted.");
+      try {
+        const response = await fetch(url, config);
+        if (response.status !== 200) {
+          throw new Error("Unable to retrieve user data.");
+        }
+        const data = await response.json();
+        console.log("data fetched from backend: ", JSON.stringify(data));
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
     };
 
     getData();
+
+    if (error) {
+      setContent(
+        "Something went wrong. Might not be your fault, please try again."
+      );
+    } else {
+      alert("Successfully deleted!");
+    }
+
+    if (isLoading) {
+      setContent("Working hard... Please wait.");
+    }
   };
 
   const handleCreate = (event) => {
@@ -265,16 +373,34 @@ const Recipes = () => {
       };
 
       // actual fetching
-      console.log("fetch starts");
-      const response = await fetch(url, config);
-      console.log("fetch ends");
-      const data = await response.json();
-      console.log("data fetched from backend: ", JSON.stringify(data));
+      try {
+        const response = await fetch(url, config);
+        if (response.status !== 200) {
+          throw new Error("Unable to retrieve user data.");
+        }
+        const data = await response.json();
+        console.log("data fetched from backend: ", JSON.stringify(data));
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
     };
 
     getData();
 
-    alert("Ok! Recipe created.");
+    if (error) {
+      setContent(
+        "Something went wrong. Might not be your fault, please try again."
+      );
+    } else {
+      alert("Successfully created!");
+    }
+
+    if (isLoading) {
+      setContent("Working hard... Please wait.");
+    }
+
+    // reset all fields to empty
     setShowCreate(false);
     setMeatForm("");
     setVegForm("");
@@ -350,11 +476,17 @@ const Recipes = () => {
           handleSearch={handleSearch}
           handleViewAll={handleViewAll}
         />
-        <RecipeResults
-          recipeData={recipeData}
-          handleDelete={handleDelete}
-          handleUpdate={handleUpdate}
-        />
+
+        {error || isLoading || recipeData.length === 0 ? (
+          content
+        ) : (
+          <RecipeResults
+            recipeData={recipeData}
+            handleDelete={handleDelete}
+            handleUpdate={handleUpdate}
+          />
+        )}
+
         <div className="link">
           {emptyDisplay ? (
             ""
