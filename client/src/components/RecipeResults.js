@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useCallback, useContext } from "react";
+import ReactContext from "../context/react.context";
 
 const RecipeResults = (props) => {
   // //added
@@ -33,14 +34,21 @@ const RecipeResults = (props) => {
 
   // // End of Added
 
-  console.log(props.recipeData);
+  // console.log(props.recipeData);
+  const reactCtx = useContext(ReactContext);
+  if (props.recipeData.length !== 0) {
+    reactCtx.setEmptyDisplay(false);
+  } else {
+    reactCtx.setEmptyDisplay(true);
+  }
+
   const display = props.recipeData.map((d, i) => {
-    console.log(d);
+    // console.log(d);
     return (
-      <div id="recipe-results">
+      <div id="recipe-card">
         Recipes component Name: {d.name}
         <br />
-        <div fontSize="100px">{d.calories}</div> calories
+        <div>{d.calories}</div> calories
         <br />
         {d.prepTime} minutes
         <br />
@@ -50,11 +58,13 @@ const RecipeResults = (props) => {
         {d.meat}, {d.veg}
         <br />
         {d.name}
+        <br /> <button onClick={() => props.handleUpdate(d._id)}>Update</button>
+        <button onClick={() => props.handleDelete(d._id)}>Delete</button>
       </div>
     );
   });
 
-  return <div className="all-results">{display}</div>;
+  return <div id="recipe-results">{display}</div>;
 };
 
 export default RecipeResults;
