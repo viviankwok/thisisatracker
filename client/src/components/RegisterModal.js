@@ -24,7 +24,36 @@ const OverLay = (props) => {
   };
 
   const handleSendRegister = (e) => {
-    console.log("clicked");
+    e.preventDefault();
+
+    const getData = async () => {
+      // endpoint URL
+      const url = "http://localhost:5001/users/create";
+
+      // fetch config
+      const config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+          password1: password,
+          isAdmin: true,
+        }),
+      };
+
+      console.log(name);
+      console.log("fetch starts");
+      const response = await fetch(url, config);
+      const data = await response.json();
+      console.log("data fetched from backend: ", JSON.stringify(data));
+    };
+
+    getData();
+    console.log("registered");
   };
 
   const validate = (values) => {
@@ -89,20 +118,15 @@ const OverLay = (props) => {
                 />
               </div>
               <p>{formErrors.password}</p>
-              <button
-                className="fluid ui button blue"
-                onClick={handleSendRegister}
-              >
-                Register
-              </button>
-              <button
-                className="fluid ui button blue"
-                onClick={props.okayClicked}
-              >
-                Back to Sign in
-              </button>
+              <button>Submit</button>
             </div>
           </form>
+          <button className="fluid ui button blue" onClick={handleSendRegister}>
+            Register
+          </button>
+          <button className="fluid ui button blue" onClick={props.okayClicked}>
+            Back to Sign in
+          </button>
         </div>
       </div>
     </div>
