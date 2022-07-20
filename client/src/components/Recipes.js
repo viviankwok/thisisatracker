@@ -28,7 +28,7 @@ const Recipes = () => {
   const [vegForm, setVegForm] = useState("");
   const [tagsForm, setTagsForm] = useState("");
   const [caloriesForm, setCaloriesForm] = useState(0);
-  const [instructionsForm, setInstructionsForm] = useState(0);
+  const [instructionsForm, setInstructionsForm] = useState("");
   const [prepTimeForm, setPrepTimeForm] = useState(0);
   const [idForm, setIdForm] = useState("");
   // access token
@@ -81,6 +81,7 @@ const Recipes = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          authorization: "Bearer " + accessToken,
         },
       };
 
@@ -95,6 +96,7 @@ const Recipes = () => {
   };
 
   const handleUpdate = (id) => {
+    // step 1/2: populates form with pre-existing fields
     console.log(`update btn clicked for ${id}`);
     setShowEdit(true);
 
@@ -108,6 +110,7 @@ const Recipes = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: "Bearer " + accessToken,
         },
         body: JSON.stringify({
           id: id,
@@ -133,18 +136,21 @@ const Recipes = () => {
   };
 
   const handleEditSubmit = (id) => {
+    // step 2/2: sends edited fields to db for updating
+
     console.log(`submit edit btn clicked for ${id}`);
 
     // update recipe db with current state
     const updateData = async () => {
       // endpoint URL
-      const url = "http://localhost:5001/recipes/edit2";
+      const url = "http://localhost:5001/recipes/edit";
 
       // fetch config
       const config = {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: "Bearer " + accessToken,
         },
         body: JSON.stringify({
           id: id,
@@ -165,23 +171,32 @@ const Recipes = () => {
     };
     updateData();
     setShowEdit(false);
+
+    // reset form fields to empty
+    setIdForm("");
+    setNameForm("");
+    setMeatForm("");
+    setVegForm("");
+    setTagsForm("");
+    setCaloriesForm(0);
+    setInstructionsForm("");
+    setPrepTimeForm(0);
   };
 
   const handleDelete = (id) => {
-    // event.preventDefault();
-
     console.log("delete btn clicked in parent: Recipe.js");
     console.log(id);
 
     const getData = async () => {
       // endpoint URL
-      const url = "http://localhost:5001/recipes/delete2";
+      const url = "http://localhost:5001/recipes/delete";
 
       // fetch config
       const config = {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          authorization: "Bearer " + accessToken,
         },
         body: JSON.stringify({
           id: id,
@@ -199,30 +214,44 @@ const Recipes = () => {
   };
 
   const handleCreate = (event) => {
+    // opens create recipe modal
     console.log("handleCreate / create new recipe clicked");
     setShowCreate(true);
   };
 
   const handleClose = (event) => {
+    // close modal
     event.preventDefault();
     console.log("close clicked");
     setShowCreate(false);
     setShowEdit(false);
+
+    // reset form fields to empty
+    setIdForm("");
+    setNameForm("");
+    setMeatForm("");
+    setVegForm("");
+    setTagsForm("");
+    setCaloriesForm(0);
+    setInstructionsForm("");
+    setPrepTimeForm(0);
   };
 
   const handleModalOkay = (event) => {
+    // sends info to db to create recipe
     event.preventDefault();
     console.log("handleModalOkay clicked");
 
     const getData = async () => {
       // endpoint URL
-      const url = "http://localhost:5001/recipes/create2";
+      const url = "http://localhost:5001/recipes/create";
 
       // fetch config
       const config = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: "Bearer " + accessToken,
         },
         body: JSON.stringify({
           name: nameForm,

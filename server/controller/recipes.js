@@ -73,14 +73,13 @@ router.post("/seed", async (req, res) => {
 
 // GET ALL
 // router.get("/recipes", auth, async (req, res) => {
-router.get("/recipes", async (req, res) => {
+router.get("/recipes", auth, async (req, res) => {
   const recipes = await Recipe.find();
   res.json(recipes);
 });
 
-// GET ONE - recipe WITHOUT S
-// router.get("/recipe", auth, async (req, res) => {
-router.post("/recipe", async (req, res) => {
+// GET ONE
+router.post("/recipe", auth, async (req, res) => {
   const recipe = await Recipe.findOne({ _id: req.body.id });
   res.json(recipe);
 });
@@ -108,34 +107,9 @@ router.post(
   }
 );
 
-// CREATE - without auth
-router.post(
-  "/create2",
-  [
-    // all fields exceipt instructions are required
-    check("name", "Name is required.").not().isEmpty(),
-    check("meat", "Please select a protein.").not().isEmpty(),
-    check("veg", "Veg is required.").not().isEmpty(),
-    check("tags", "Please select all tags that apply.").not().isEmpty(),
-  ],
-  async (req, res) => {
-    try {
-      const newRecipe = Recipe.create(req.body);
-      console.log(`new recipe created: ${newRecipe}`);
-      res.json("Recipe created.");
-    } catch (error) {
-      console.log(error);
-      res.status(400).json({ status: 400, message: "An error has occurred." });
-    }
-  }
-);
-
 // FILTER
 router.post("/filter", auth, async (req, res) => {
   console.log("POST /filter route activated");
-  console.log("req.body.meatTags: ", req.body.meatTags);
-  console.log("req.body.vegTags: ", req.body.vegTags);
-  console.log("req.body.tags: ", req.body.tags);
 
   try {
     // search criteria: any tags AND any meatTags AND any vegTags
@@ -195,33 +169,6 @@ router.patch("/edit", auth, async (req, res) => {
   }
 });
 
-// UDPATE/EDIT - without auth
-router.patch("/edit2", async (req, res) => {
-  try {
-    const recipe = await Recipe.find({ _id: req.body.id });
-    await Recipe.updateOne(
-      { _id: req.body.id },
-      {
-        $set: {
-          name: req.body.name || recipe.name,
-          meat: req.body.meat || recipe.meat,
-          calories: req.body.calories || recipe.calories,
-          instructions: req.body.instructions || recipe.instructions,
-          prepTime: req.body.prepTime || recipe.prepTime,
-          tags: req.body.tags || recipe.tags,
-        },
-      }
-    );
-    res.status(200).json({ status: "ok!", message: "recipe edited." });
-  } catch (error) {
-    console.log(error);
-    return res.status(401).json({
-      status: "error",
-      message: "An error occured.",
-    });
-  }
-});
-
 // DELETE - admin only
 router.delete("/delete", auth, async (req, res) => {
   console.log("DELETE /delete path activated");
@@ -238,22 +185,6 @@ router.delete("/delete", auth, async (req, res) => {
         message: "Unauthorised to edit. Don't anyhow try.",
       });
     }
-  } catch (error) {
-    console.log(error);
-    return res.status(401).json({
-      status: "error",
-      message: "An error occured.",
-    });
-  }
-});
-
-// DELETE - without auth
-router.delete("/delete2", async (req, res) => {
-  console.log("DELETE /delete2 path activated");
-
-  try {
-    await Recipe.deleteOne({ _id: req.body.id });
-    res.json({ status: "ok!", message: "Recipe deleted." });
   } catch (error) {
     console.log(error);
     return res.status(401).json({

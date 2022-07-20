@@ -124,7 +124,7 @@ const OverLay = (props) => {
               type="number"
               value={reactCtx.prepTimeForm}
               onChange={handlePrepTimeChange}
-            ></input>{" "}
+            ></input>
             <br />
           </form>
         </div>
