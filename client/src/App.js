@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Navigate, Routes } from "react-router-dom";
+import RequireLogin from "./components/RequireLogin";
 import NavBar from "./components/NavBar";
 import Main from "./components/Main";
 import Recipes from "./components/Recipes";
@@ -18,8 +19,12 @@ function App() {
           <Route path="/" element={<Navigate replace to="/Main" />} />
           <Route path="/Main" element={<Main />} />
           <Route path="/Login" element={<Login />} />
-          <Route path="/Recipes" element={<Recipes />} />
-          <Route path="/CalorieTracker" element={<CalorieTracker />} />
+
+          {/* Protect these routes with RequireLogin */}
+          <Route element={<RequireLogin />}>
+            <Route path="/Recipes" element={<Recipes />} />
+            <Route path="/CalorieTracker" element={<CalorieTracker />} />
+          </Route>
         </Routes>
       </main>
     </div>
