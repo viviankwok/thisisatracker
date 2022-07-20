@@ -54,7 +54,7 @@ const OverLay = (props) => {
               onChange={handleNameChange}
             ></input>
             <br />
-            nameForm state: {reactCtx.nameForm} <br />
+            {/* nameForm state: {reactCtx.nameForm} <br /> */}
             {/* ==================== MEAT ==================== */}
             <label className={styles.label}>Protein: </label>
             <select
@@ -69,8 +69,8 @@ const OverLay = (props) => {
               <option value="impossible Meat">Impossible Meat</option>
             </select>
             <br />
-            meatForm state: {reactCtx.meatForm}
-            <br />
+            {/* meatForm state: {reactCtx.meatForm} */}
+
             {/* ==================== VEG ==================== */}
             <label className={styles.label}>Veg: </label>
             <select
@@ -85,8 +85,8 @@ const OverLay = (props) => {
               <option value="baby spinach">Baby Spinach</option>
             </select>
             <br />
-            vegForm state: {reactCtx.vegForm}
-            <br />
+            {/* vegForm state: {reactCtx.vegForm} */}
+
             {/* ==================== TAGS ==================== */}
             <label className={styles.label}>Tags: </label>
             <select
@@ -101,8 +101,7 @@ const OverLay = (props) => {
               <option value="delicious">Delicious</option>
             </select>
             <br />
-            tagsForm state: {reactCtx.tagsForm}
-            <br />
+            {/* tagsForm state: {reactCtx.tagsForm} */}
             {/* ==================== CALORIES ==================== */}
             <label className={styles.label}>Calories: </label>
             <input
@@ -112,7 +111,7 @@ const OverLay = (props) => {
               onChange={handleCaloriesChange}
             ></input>
             <br />
-            caloriesForm state: {reactCtx.caloriesForm} <br />
+            {/* caloriesForm state: {reactCtx.caloriesForm} <br /> */}
             {/* ==================== INSTRUCTIONS ==================== */}
             <label className={styles.label}>Instructions: </label>
             <input
@@ -127,7 +126,7 @@ const OverLay = (props) => {
               type="number"
               value={reactCtx.prepTimeForm}
               onChange={handlePrepTimeChange}
-            ></input>{" "}
+            ></input>
             <br />
           </form>
         </div>
@@ -136,7 +135,9 @@ const OverLay = (props) => {
         <footer className={styles.actions}>
           <button onClick={props.closeClicked}>Close</button>
           &nbsp;&nbsp;
-          <button onClick={props.handleEditSubmit}>Update</button>
+          <button onClick={() => props.handleEditSubmit(reactCtx.idForm)}>
+            Update
+          </button>
         </footer>
       </div>
     </div>
