@@ -50,9 +50,15 @@ const OverLay = (props) => {
       const response = await fetch(url, config);
       const data = await response.json();
       console.log("data fetched from backend: ", JSON.stringify(data));
+      if (name !== "" && password !== "" && email !== "") {
+        alert("Your account has been registered");
+      } else {
+        alert("Please fill in all the inputs and then click the Submit button");
+      }
     };
 
     getData();
+
     console.log("registered");
   };
 
@@ -85,37 +91,49 @@ const OverLay = (props) => {
           <form onSubmit={handleSubmit}>
             <div className="ui divider"></div>
             <div className="ui form">
-              <div className="field">
-                <label>Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Username"
-                  value={formValues.username}
-                  onChange={handleChange}
-                />
+              <div className="field row">
+                <div className="col-sm-3">
+                  <label>Username</label>
+                </div>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={formValues.username}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
               <p>{formErrors.username}</p>
-              <div className="field">
-                <label>Email</label>
-                <input
-                  type="text"
-                  name="email"
-                  placeholder="Email"
-                  value={formValues.email}
-                  onChange={handleChange}
-                />
+              <div className="field row">
+                <div className="col-sm-3">
+                  <label>Email</label>
+                </div>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    name="email"
+                    placeholder="Email"
+                    value={formValues.email}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
               <p>{formErrors.email}</p>
-              <div className="field">
-                <label>Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formValues.password}
-                  onChange={handleChange}
-                />
+              <div className="field row">
+                <div className="col-sm-3">
+                  <label>Password</label>
+                </div>
+                <div className="col-sm-3">
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={formValues.password}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
               <p>{formErrors.password}</p>
               <button>Submit</button>
