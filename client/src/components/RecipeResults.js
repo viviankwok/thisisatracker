@@ -15,7 +15,9 @@ const RecipeResults = (props) => {
       <div id="recipe-card">
         <div id="recipe-name">{d.name}</div>
         <br />
-        <div className="small">main ingredients:</div> <br />
+        <div>
+          <strong>main ingredients:</strong>
+        </div>
         <div className="capitalise">
           {d.meat}, {d.veg}
         </div>
@@ -26,7 +28,7 @@ const RecipeResults = (props) => {
         <br />
         {d.instructions}
         <br />
-        <br /> <br />
+        <br />
         <button onClick={() => props.handleUpdate(d._id)}>Update</button> &nbsp;
         <button onClick={() => props.handleDelete(d._id)}>Delete</button>
       </div>

@@ -141,8 +141,7 @@ span:hover {
   text-transform: capitalize;
 }
 .small {
-  font-size: small;
-  height: min-inher;
+  /* font-size: small; */
 }
 #recipe-name {
   font-size: large;
@@ -164,7 +163,7 @@ span:hover {
 #recipe-card {
   background-color: var(--orange);
   display: inline-block;
-  height: 300px;
+  height: 350px;
   width: 250px;
   border-radius: 10px;
   padding: 20px;

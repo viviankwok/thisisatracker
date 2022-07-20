@@ -37,37 +37,37 @@ const RecipeSearch = (props) => {
           <div className="search-category" onChange={handleMeatInput}>
             <h4>Protein</h4>
             <input type="radio" value="chicken" name="meat" />
-            Chicken <br />
+            &nbsp;Chicken <br />
             <input type="radio" value="beef" name="meat" />
-            Beef <br />
+            &nbsp;Beef <br />
             <input type="radio" value="pork" name="meat" />
-            Pork <br />
+            &nbsp;Pork <br />
             <input type="radio" value="impossible meat" name="meat" />
-            Impossible Meat <br />
+            &nbsp;Impossible Meat <br />
           </div>
           {/* ==================== VEG ==================== */}
           <div className="search-category" onChange={handleVegInput}>
             <h4>Veg</h4>
             <input type="radio" value="lettuce" name="veg" />
-            Lettuce <br />
+            &nbsp;Lettuce <br />
             <input type="radio" value="tomato" name="veg" />
-            Tomato <br />
+            &nbsp;Tomato <br />
             <input type="radio" value="cabbage" name="veg" />
-            Cabbage <br />
+            &nbsp;Cabbage <br />
             <input type="radio" value="baby spinach" name="veg" />
-            Baby Spinach <br />
+            &nbsp;Baby Spinach <br />
           </div>
           {/* ==================== TAGS ==================== */}
           <div className="search-category" onChange={handleTagsInput}>
             <h4>Tags</h4>
             <input type="radio" value="healthy" name="tags" />
-            Healthy <br />
+            &nbsp;Healthy <br />
             <input type="radio" value="quick" name="tags" />
-            Quick <br />
+            &nbsp;Quick <br />
             <input type="radio" value="easy" name="tags" />
-            Easy <br />
+            &nbsp;Easy <br />
             <input type="radio" value="refreshing" name="tags" />
-            Refreshing <br />
+            &nbsp;Refreshing <br />
           </div>
           <button type="submit">Search</button>
           <div className="link">

@@ -419,7 +419,7 @@ const Recipes = () => {
   // };
 
   return (
-    <div id="recipes-main-div">
+    <div id="recipes-main-div container-fluid">
       <ReactContext.Provider
         value={{
           meatInput,
