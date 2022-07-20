@@ -29,6 +29,7 @@ const LoginForm = (props) => {
             />
           </div>
           <button type="submit">Submit</button>
+          <button onClick={props.handleRegisterSubmit}>Register</button>
         </form>
       </div>
       <button id="button" onClick={reactCtx.logout}>
